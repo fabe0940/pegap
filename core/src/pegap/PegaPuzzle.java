@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import pegap.Tile;
@@ -28,6 +29,7 @@ public class PegaPuzzle implements ApplicationListener {
 				G.addActor(t);
 			}
 		}
+		G.setPosition(400, 0, Align.bottomLeft);
 
 		S.addActor(G);
 	}

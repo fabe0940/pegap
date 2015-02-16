@@ -39,7 +39,7 @@ public class Tile extends Actor {
 
 	Tile() {
 		setPos(0.0f, 0.0f);
-		setTexture("img/tiles/tile.png");
+		setTexture("img/tiles/tile_plain.png");
 	}
 
 	Tile(float y, float x, String fname) {
