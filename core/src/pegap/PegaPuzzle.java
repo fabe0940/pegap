@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -16,8 +17,14 @@ public class PegaPuzzle implements ApplicationListener {
 	@Override
 	public void create() {
 		S = new Stage(new FitViewport(800, 600));
-		Tile t = new Tile();
-		S.addActor(t);
+
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 10; j++) {
+				Tile t = new Tile();
+				t.setPos((float) i, (float) j);
+				S.addActor(t);
+			}
+		}
 	}
 
 	@Override
