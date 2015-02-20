@@ -1,48 +1,37 @@
 package pegap;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import pegap.Tile;
+import pegap.Display;
+import pegap.Input;
+import pegap.Model;
 
 public class PegaPuzzle implements ApplicationListener {
-	private Stage S;
-	private Group G;
+	private Display screen;
+	private Input input;
+	private Model game;
 
 	@Override
 	public void create() {
-		S = new Stage(new FitViewport(800, 600));
-		G = new Group();
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-		for(int i = 0; i < 10; i++) {
-			for(int j = 0; j < 10; j++) {
-				Tile t = new Tile();
-				t.setPos((float) i, (float) j);
-				G.addActor(t);
-			}
-		}
-		G.setPosition(400, 0, Align.bottomLeft);
-
-		S.addActor(G);
+		screen = new Display();
+		game = new Model();
 	}
 
 	@Override
 	public void dispose() {
-		S.dispose();
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		S.draw();
+		input = new Input();
+
+		game.update(input);
+		screen.render(game);
 	}
 
 	@Override
