@@ -15,7 +15,8 @@ import pegap.Model;
 
 public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	private Display screen;
-	private Input input;
+	private Input screenInput;
+	private Input modelInput;
 	private Model game;
 
 	private void  processInput() {
@@ -23,16 +24,16 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 		mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
 		if(mousePos.y < Display.SCROLL_BAND) {
-			input.scrollUp = true;
+			screenInput.scrollUp = true;
 		}
 		if(mousePos.y > (Display.WINDOW_HEIGHT - Display.SCROLL_BAND)) {
-			input.scrollDown = true;
+			screenInput.scrollDown = true;
 		}
 		if(mousePos.x < Display.SCROLL_BAND) {
-			input.scrollLeft = true;
+			screenInput.scrollLeft = true;
 		}
 		if(mousePos.x > (Display.WINDOW_WIDTH - Display.SCROLL_BAND)) {
-			input.scrollRight = true;
+			screenInput.scrollRight = true;
 		}
 	}
 
@@ -43,7 +44,8 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 		screen = new Display();
 		game = new Model();
-		input = new Input();
+		screenInput = new Input();
+		modelInput = new Input();
 	}
 
 	@Override
@@ -54,8 +56,8 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	@Override
 	public void render() {
 		processInput();
-		game.update(input);
-		screen.update(input);
+		screen.update(screenInput);
+		game.update(modelInput);
 
 		screen.render(game);
 	}
@@ -74,20 +76,20 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown (int keycode) {
-		if(keycode == Keys.UP) input.scrollUp = true;
-		if(keycode == Keys.DOWN) input.scrollDown = true;
-		if(keycode == Keys.LEFT) input.scrollLeft = true;
-		if(keycode == Keys.RIGHT) input.scrollRight = true;
+		if(keycode == Keys.UP) screenInput.scrollUp = true;
+		if(keycode == Keys.DOWN) screenInput.scrollDown = true;
+		if(keycode == Keys.LEFT) screenInput.scrollLeft = true;
+		if(keycode == Keys.RIGHT) screenInput.scrollRight = true;
 
 		return true;
 	}
 
 	@Override
 	public boolean keyUp (int keycode) {
-		if(keycode == Keys.UP) input.scrollUp = false;
-		if(keycode == Keys.DOWN) input.scrollDown = false;
-		if(keycode == Keys.LEFT) input.scrollLeft = false;
-		if(keycode == Keys.RIGHT) input.scrollRight = false;
+		if(keycode == Keys.UP) screenInput.scrollUp = false;
+		if(keycode == Keys.DOWN) screenInput.scrollDown = false;
+		if(keycode == Keys.LEFT) screenInput.scrollLeft = false;
+		if(keycode == Keys.RIGHT) screenInput.scrollRight = false;
 
 		return true;
 	}
@@ -103,17 +105,22 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 		Vector2 worldPos;
 
 		screenPos = new Vector2(x, Display.WINDOW_HEIGHT - y);
-		screenPos.x -= screen.offset.x;
-		screenPos.y -= screen.offset.y;
 
-		worldPos = Display.screenToWorld(screenPos);
-		worldPos.x = (int) Math.floor(worldPos.x);
-		worldPos.y = (int) Math.floor(worldPos.y);
+		if((screenPos.y < Display.UI_SIDE_HEIGHT && Math.abs((Display.WINDOW_WIDTH / 2) - screenPos.x) > (Display.UI_CENTER_WIDTH / 2)) || (screenPos.y < Display.UI_CENTER_HEIGHT)) {
+			if(button == Buttons.LEFT) {
+				screenInput.clicks.add(screenPos);
+			}
+		} else {
+			screenPos.x -= screen.offset.x;
+			screenPos.y -= screen.offset.y;
 
-		Gdx.app.debug("PegaPuzzle:touchDown", "(" + x + "," + y + ") --> (" + screenPos.x + "," + screenPos.y + ") --> (" + worldPos.x + "," + worldPos.y + ")");
+			worldPos = Display.screenToWorld(screenPos);
+			worldPos.x = (int) Math.floor(worldPos.x);
+			worldPos.y = (int) Math.floor(worldPos.y);
 
-		if(button == Buttons.LEFT) {
-			input.clicks.add(worldPos);
+			if(button == Buttons.LEFT) {
+				modelInput.clicks.add(worldPos);
+			}
 		}
 
 		return true;

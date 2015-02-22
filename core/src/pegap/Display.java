@@ -19,8 +19,14 @@ class Display {
 	public static final int SCROLL_RATE = 10;
 	public static final int TILE_WIDTH = 128;
 	public static final int TILE_HEIGHT = 64;
+	public static final int UI_CENTER_WIDTH = 400;
+	public static final int UI_CENTER_HEIGHT = 150;
+	public static final int UI_SIDE_WIDTH = 200;
+	public static final int UI_SIDE_HEIGHT = 200;
 	public static final int WINDOW_WIDTH = Gdx.graphics.getWidth();
 	public static final int WINDOW_HEIGHT = Gdx.graphics.getHeight();
+
+	private static final int TEX_UI_BACK = 101;
 	private static final int OFFSET_MIN_X = (int) (0.0 * WINDOW_WIDTH);
 	private static final int OFFSET_MAX_X = (int) (1.0 * WINDOW_WIDTH);
 	private static final int OFFSET_MIN_Y = (int) (-0.5 * WINDOW_HEIGHT);
@@ -56,6 +62,18 @@ class Display {
 	}
 
 	public void update(Input in) {
+		Vector2 click;
+		Iterator<Vector2> iter;
+
+		iter = in.clicks.iterator();
+		while(iter.hasNext()) {
+			click = iter.next();
+
+			Gdx.app.debug("Display:update", "Processing click (" + click.x + "," + click.y + ")");
+
+			iter.remove();
+		}
+
 		if(in.scrollUp) offset.y -= SCROLL_RATE;
 		if(in.scrollDown) offset.y += SCROLL_RATE;
 		if(in.scrollLeft) offset.x += SCROLL_RATE;
@@ -70,6 +88,7 @@ class Display {
 	public void render(Model m) {
 		int type;
 		List<Tile> map = m.getMap();
+		String fname;
 		Tile t;
 		Vector2 pos;
  
@@ -77,6 +96,7 @@ class Display {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
+
 		for(int i = 0; i < map.size(); i++) {
 			t = map.get(i);
 			pos = worldToScreen(t.pos);
@@ -86,7 +106,7 @@ class Display {
 			type = t.type;
 
 			if((textures.get(type)) == null) {
-				String fname = "img/tiles/" + String.format("%04d", type) + ".png";
+				fname = new String("img/" + String.format("%04d", type) + ".png");
 				Gdx.app.debug("Display:render", "Adding texture " + fname);
 				textures.put(type, new Texture(Gdx.files.internal(fname)));
 			}
@@ -97,6 +117,19 @@ class Display {
 			sprite.draw(batch);
 
 		}
+
+
+		if((textures.get(TEX_UI_BACK)) == null) {
+			fname = new String("img/" + String.format("%04d", TEX_UI_BACK) + ".png");
+
+			Gdx.app.debug("Display:render", "Adding texture " + fname);
+			textures.put(TEX_UI_BACK, new Texture(Gdx.files.internal(fname)));
+		}
+
+		sprite = new Sprite(textures.get(TEX_UI_BACK));
+		sprite.setPosition(0, 0);
+		sprite.draw(batch);
+
 
 		batch.end();
 	}
