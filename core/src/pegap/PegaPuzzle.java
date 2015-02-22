@@ -18,6 +18,24 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	private Input input;
 	private Model game;
 
+	private void  processInput() {
+		Vector2 mousePos;
+
+		mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+		if(mousePos.y < Display.SCROLL_BAND) {
+			input.scrollUp = true;
+		}
+		if(mousePos.y > (Display.WINDOW_HEIGHT - Display.SCROLL_BAND)) {
+			input.scrollDown = true;
+		}
+		if(mousePos.x < Display.SCROLL_BAND) {
+			input.scrollLeft = true;
+		}
+		if(mousePos.x > (Display.WINDOW_WIDTH - Display.SCROLL_BAND)) {
+			input.scrollRight = true;
+		}
+	}
+
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -35,22 +53,7 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
-		Vector2 mousePos;
-
-		mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-		if(mousePos.y < Display.SCROLL_BAND) {
-			input.scrollUp = true;
-		}
-		if(mousePos.y > (Display.WINDOW_HEIGHT - Display.SCROLL_BAND)) {
-			input.scrollDown = true;
-		}
-		if(mousePos.x < Display.SCROLL_BAND) {
-			input.scrollLeft = true;
-		}
-		if(mousePos.x > (Display.WINDOW_WIDTH - Display.SCROLL_BAND)) {
-			input.scrollRight = true;
-		}
-
+		processInput();
 		game.update(input);
 		screen.update(input);
 
@@ -104,8 +107,8 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 		screenPos.y -= screen.offset.y;
 
 		worldPos = Display.screenToWorld(screenPos);
-		worldPos.x = (int) (worldPos.x > 0f ? Math.floor(worldPos.x) : Math.floor(worldPos.x));
-		worldPos.y = (int) (worldPos.y > 0f ? Math.floor(worldPos.y) : Math.floor(worldPos.y));
+		worldPos.x = (int) Math.floor(worldPos.x);
+		worldPos.y = (int) Math.floor(worldPos.y);
 
 		Gdx.app.debug("PegaPuzzle:touchDown", "(" + x + "," + y + ") --> (" + screenPos.x + "," + screenPos.y + ") --> (" + worldPos.x + "," + worldPos.y + ")");
 
