@@ -5,6 +5,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 
@@ -34,7 +35,25 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
+		Vector2 mousePos;
+
+		mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+		if(mousePos.y < Display.SCROLL_BAND) {
+			input.scrollUp = true;
+		}
+		if(mousePos.y > (Display.WINDOW_HEIGHT - Display.SCROLL_BAND)) {
+			input.scrollDown = true;
+		}
+		if(mousePos.x < Display.SCROLL_BAND) {
+			input.scrollLeft = true;
+		}
+		if(mousePos.x > (Display.WINDOW_WIDTH - Display.SCROLL_BAND)) {
+			input.scrollRight = true;
+		}
+
 		game.update(input);
+		screen.update(input);
+
 		screen.render(game);
 	}
 
@@ -52,12 +71,22 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown (int keycode) {
-		return false;
+		if(keycode == Keys.UP) input.scrollUp = true;
+		if(keycode == Keys.DOWN) input.scrollDown = true;
+		if(keycode == Keys.LEFT) input.scrollLeft = true;
+		if(keycode == Keys.RIGHT) input.scrollRight = true;
+
+		return true;
 	}
 
 	@Override
 	public boolean keyUp (int keycode) {
-		return false;
+		if(keycode == Keys.UP) input.scrollUp = false;
+		if(keycode == Keys.DOWN) input.scrollDown = false;
+		if(keycode == Keys.LEFT) input.scrollLeft = false;
+		if(keycode == Keys.RIGHT) input.scrollRight = false;
+
+		return true;
 	}
 
 	@Override
