@@ -10,14 +10,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import pegap.Input;
 import pegap.Model;
 import pegap.Tile;
 
 class Display {
-	public static final int WINDOW_WIDTH = 800;
-	public static final int WINDOW_HEIGHT = 600;
+	public static final int SCROLL_RATE = 10;
 	public static final int TILE_WIDTH = 128;
 	public static final int TILE_HEIGHT = 64;
+	public static final int WINDOW_WIDTH = 800;
+	public static final int WINDOW_HEIGHT = 600;
 
 	public static Vector2 worldToScreen(Vector2 pos) {
 		Vector2 res = new Vector2();
@@ -46,6 +48,13 @@ class Display {
 		batch = new SpriteBatch();
 		textures = new HashMap<Integer, Texture>();
 		offset = new Vector2(Display.WINDOW_WIDTH / 2, 200);
+	}
+
+	public void update(Input in) {
+		if(in.scrollUp) offset.y -= Display.SCROLL_RATE;
+		if(in.scrollDown) offset.y += Display.SCROLL_RATE;
+		if(in.scrollLeft) offset.x += Display.SCROLL_RATE;
+		if(in.scrollRight) offset.x -= Display.SCROLL_RATE;
 	}
 
 	public void render(Model m) {
