@@ -24,6 +24,7 @@ public class PegaPuzzle implements ApplicationListener {
 
 	@Override
 	public void dispose() {
+		screen.dispose();
 	}
 
 	@Override

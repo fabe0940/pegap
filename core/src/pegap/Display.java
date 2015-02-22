@@ -14,6 +14,8 @@ import pegap.Model;
 import pegap.Tile;
 
 class Display {
+	private static final int WINDOW_WIDTH = 800;
+	private static final int WINDOW_HEIGHT = 600;
 	private static final int TILE_WIDTH = 128;
 	private static final int TILE_HEIGHT = 64;
 
@@ -37,13 +39,17 @@ class Display {
 
 	private SpriteBatch batch;
 	private Sprite sprite;
-	private Texture tex;
+	private Map<Integer, Texture> textures;
+	private Vector2 offset;
 
 	Display() {
 		batch = new SpriteBatch();
+		textures = new HashMap<Integer, Texture>();
+		offset = new Vector2(Display.WINDOW_WIDTH / 2, 200);
 	}
 
 	public void render(Model m) {
+		int type;
 		List<Tile> map = m.getMap();
 		Tile t;
 		Vector2 pos;
@@ -55,13 +61,31 @@ class Display {
 		for(int i = 0; i < map.size(); i++) {
 			t = map.get(i);
 			pos = Display.worldToScreen(t.getPos());
-			tex = new Texture(Gdx.files.internal("img/tiles/" + String.format("%04d", t.getType()) + ".png"));
-			sprite = new Sprite(tex);
+			pos.x += offset.x;
+			pos.y += offset.y;
+			pos.x -= (Display.TILE_WIDTH / 2);
+
+			type = t.getType();
+
+			if((textures.get(type)) == null) {
+				String fname = "img/tiles/" + String.format("%04d", type) + ".png";
+				Gdx.app.debug("Display:render()", "Adding texture " + fname);
+				textures.put(type, new Texture(Gdx.files.internal(fname)));
+			}
+
+			sprite = new Sprite(textures.get(type));
 			sprite.setPosition(pos.x, pos.y);
 
 			sprite.draw(batch);
+
 		}
 
 		batch.end();
+	}
+
+	public void dispose() {
+		for(Map.Entry item : textures.entrySet()) {
+			((Texture) item.getValue()).dispose();
+		}
 	}
 }
