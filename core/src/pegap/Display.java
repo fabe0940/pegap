@@ -60,15 +60,15 @@ class Display {
 		batch.begin();
 		for(int i = 0; i < map.size(); i++) {
 			t = map.get(i);
-			pos = Display.worldToScreen(t.getPos());
+			pos = Display.worldToScreen(t.pos);
 			pos.x += offset.x - (Display.TILE_WIDTH / 2);
 			pos.y += offset.y;
 
-			type = t.getType();
+			type = t.type;
 
 			if((textures.get(type)) == null) {
 				String fname = "img/tiles/" + String.format("%04d", type) + ".png";
-				Gdx.app.debug("Display:render()", "Adding texture " + fname);
+				Gdx.app.debug("Display:render", "Adding texture " + fname);
 				textures.put(type, new Texture(Gdx.files.internal(fname)));
 			}
 

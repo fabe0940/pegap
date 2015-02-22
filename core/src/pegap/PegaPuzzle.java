@@ -52,20 +52,16 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown (int keycode) {
-		Gdx.app.debug("PegaPuzzle:keyDown", keycode + " pressed");
-
 		return false;
 	}
 
 	@Override
 	public boolean keyUp (int keycode) {
-		Gdx.app.debug("PegaPuzzle:keyUp", keycode + " released");
 		return false;
 	}
 
 	@Override
 	public boolean keyTyped (char character) {
-		Gdx.app.debug("PegaPuzzle:keyTyped", String.format("%c", character));
 		return false;
 	}
 
