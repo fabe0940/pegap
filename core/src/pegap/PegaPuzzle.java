@@ -35,6 +35,22 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
+		Vector2 mousePos;
+
+		mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+		if(mousePos.y < Display.SCROLL_BAND) {
+			input.scrollUp = true;
+		}
+		if(mousePos.y > (Display.WINDOW_HEIGHT - Display.SCROLL_BAND)) {
+			input.scrollDown = true;
+		}
+		if(mousePos.x < Display.SCROLL_BAND) {
+			input.scrollLeft = true;
+		}
+		if(mousePos.x > (Display.WINDOW_WIDTH - Display.SCROLL_BAND)) {
+			input.scrollRight = true;
+		}
+
 		game.update(input);
 		screen.update(input);
 

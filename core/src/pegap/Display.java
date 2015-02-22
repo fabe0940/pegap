@@ -15,17 +15,22 @@ import pegap.Model;
 import pegap.Tile;
 
 class Display {
+	public static final int SCROLL_BAND = 20;
 	public static final int SCROLL_RATE = 10;
 	public static final int TILE_WIDTH = 128;
 	public static final int TILE_HEIGHT = 64;
-	public static final int WINDOW_WIDTH = 800;
-	public static final int WINDOW_HEIGHT = 600;
+	public static final int WINDOW_WIDTH = Gdx.graphics.getWidth();
+	public static final int WINDOW_HEIGHT = Gdx.graphics.getHeight();
+	private static final int OFFSET_MIN_X = (int) (0.0 * WINDOW_WIDTH);
+	private static final int OFFSET_MAX_X = (int) (1.0 * WINDOW_WIDTH);
+	private static final int OFFSET_MIN_Y = (int) (-0.5 * WINDOW_HEIGHT);
+	private static final int OFFSET_MAX_Y = (int) (0.5 * WINDOW_HEIGHT);
 
 	public static Vector2 worldToScreen(Vector2 pos) {
 		Vector2 res = new Vector2();
 
-		res.x = ((Display.TILE_WIDTH / 2) * pos.x) - ((Display.TILE_WIDTH / 2) * pos.y);
-		res.y = ((Display.TILE_HEIGHT / 2) * pos.x) + ((Display.TILE_HEIGHT / 2) * pos.y);
+		res.x = ((TILE_WIDTH / 2) * pos.x) - ((TILE_WIDTH / 2) * pos.y);
+		res.y = ((TILE_HEIGHT / 2) * pos.x) + ((TILE_HEIGHT / 2) * pos.y);
 
 		return res;
 	}
@@ -33,8 +38,8 @@ class Display {
 	public static Vector2 screenToWorld(Vector2 pos) {
 		Vector2 res = new Vector2();
 
-		res.x = (pos.x / Display.TILE_WIDTH) + (pos.y / Display.TILE_HEIGHT);
-		res.y = (pos.x / (-1 * Display.TILE_WIDTH)) + (pos.y / Display.TILE_HEIGHT);
+		res.x = (pos.x / TILE_WIDTH) + (pos.y / TILE_HEIGHT);
+		res.y = (pos.x / (-1 * TILE_WIDTH)) + (pos.y / TILE_HEIGHT);
 
 		return res;
 	}
@@ -47,14 +52,19 @@ class Display {
 	Display() {
 		batch = new SpriteBatch();
 		textures = new HashMap<Integer, Texture>();
-		offset = new Vector2(Display.WINDOW_WIDTH / 2, 200);
+		offset = new Vector2(WINDOW_WIDTH / 2, 200);
 	}
 
 	public void update(Input in) {
-		if(in.scrollUp) offset.y -= Display.SCROLL_RATE;
-		if(in.scrollDown) offset.y += Display.SCROLL_RATE;
-		if(in.scrollLeft) offset.x += Display.SCROLL_RATE;
-		if(in.scrollRight) offset.x -= Display.SCROLL_RATE;
+		if(in.scrollUp) offset.y -= SCROLL_RATE;
+		if(in.scrollDown) offset.y += SCROLL_RATE;
+		if(in.scrollLeft) offset.x += SCROLL_RATE;
+		if(in.scrollRight) offset.x -= SCROLL_RATE;
+
+		if(offset.x < OFFSET_MIN_X) offset.x = OFFSET_MIN_X;
+		if(offset.x > OFFSET_MAX_X) offset.x = OFFSET_MAX_X;
+		if(offset.y < OFFSET_MIN_Y) offset.y = OFFSET_MIN_Y;
+		if(offset.y > OFFSET_MAX_Y) offset.y = OFFSET_MAX_Y;
 	}
 
 	public void render(Model m) {
@@ -69,8 +79,8 @@ class Display {
 		batch.begin();
 		for(int i = 0; i < map.size(); i++) {
 			t = map.get(i);
-			pos = Display.worldToScreen(t.pos);
-			pos.x += offset.x - (Display.TILE_WIDTH / 2);
+			pos = worldToScreen(t.pos);
+			pos.x += offset.x - (TILE_WIDTH / 2);
 			pos.y += offset.y;
 
 			type = t.type;
