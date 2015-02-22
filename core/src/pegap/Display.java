@@ -61,9 +61,8 @@ class Display {
 		for(int i = 0; i < map.size(); i++) {
 			t = map.get(i);
 			pos = Display.worldToScreen(t.getPos());
-			pos.x += offset.x;
+			pos.x += offset.x - (Display.TILE_WIDTH / 2);
 			pos.y += offset.y;
-			pos.x -= (Display.TILE_WIDTH / 2);
 
 			type = t.getType();
 

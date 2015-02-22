@@ -11,7 +11,12 @@ public class Tile {
 		setType(0001);
 	}
 
-	Tile(float y, float x, int t) {
+	Tile(int x, int y, int t) {
+		setPos((float) x, (float) y);
+		setType(t);
+	}
+
+	Tile(float x, float y, int t) {
 		setPos(x, y);
 		setType(t);
 	}

@@ -1,8 +1,10 @@
 package pegap;
 
+import java.lang.*;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,20 +17,14 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	private Input input;
 	private Model game;
 
-	private Input getInput() {
-		Input res;
-
-		res = new Input();
-
-		return res;
-	}
-
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.input.setInputProcessor(this);
 
 		screen = new Display();
 		game = new Model();
+		input = new Input();
 	}
 
 	@Override
@@ -38,8 +34,6 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
-		input = getInput();
-
 		game.update(input);
 		screen.render(game);
 	}
@@ -58,22 +52,43 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown (int keycode) {
+		Gdx.app.debug("PegaPuzzle:keyDown", keycode + " pressed");
+
 		return false;
 	}
 
 	@Override
 	public boolean keyUp (int keycode) {
+		Gdx.app.debug("PegaPuzzle:keyUp", keycode + " released");
 		return false;
 	}
 
 	@Override
 	public boolean keyTyped (char character) {
+		Gdx.app.debug("PegaPuzzle:keyTyped", String.format("%c", character));
 		return false;
 	}
 
 	@Override
 	public boolean touchDown (int x, int y, int pointer, int button) {
-		return false;
+		Vector2 screenPos;
+		Vector2 worldPos;
+
+		screenPos = new Vector2(x, Display.WINDOW_HEIGHT - y);
+		screenPos.x -= screen.offset.x;
+		screenPos.y -= screen.offset.y;
+
+		worldPos = Display.screenToWorld(screenPos);
+		worldPos.x = (int) (worldPos.x > 0f ? Math.floor(worldPos.x) : Math.floor(worldPos.x));
+		worldPos.y = (int) (worldPos.y > 0f ? Math.floor(worldPos.y) : Math.floor(worldPos.y));
+
+		Gdx.app.debug("PegaPuzzle:touchDown", "(" + x + "," + y + ") --> (" + screenPos.x + "," + screenPos.y + ") --> (" + worldPos.x + "," + worldPos.y + ")");
+
+		if(button == Buttons.LEFT) {
+			input.clicks.add(worldPos);
+		}
+
+		return true;
 	}
 
 	@Override

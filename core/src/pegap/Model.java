@@ -13,12 +13,7 @@ class Model {
 
 	Model() {
 		map = new ArrayList<Tile>();
-
-		for(int i = 0; i < Model.WORLD_SIZE; i++) {
-			for(int j = 0; j < Model.WORLD_SIZE; j++) {
-				map.add(new Tile((float) i, (float) j, 1));
-			}
-		}
+		map.add(new Tile(0, 0, 1));
 	}
 
 	public void update(Input in) {
