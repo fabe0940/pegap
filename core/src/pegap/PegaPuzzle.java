@@ -75,7 +75,7 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyTyped (char character) {
-		if(character == '?') input.help = true;
+		if(character == 'q') Gdx.app.exit();
 
 		return false;
 	}

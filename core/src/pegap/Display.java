@@ -189,9 +189,10 @@ class Display {
 		font.draw(batch, "Scroll South - J", 5, 55);
 		font.draw(batch, "Scroll North - K", 5, 40);
 		font.draw(batch, "Scroll East - L", 5, 25);
-		font.draw(batch, "Move Northwest - Y", 150, 70);
-		font.draw(batch, "Move Northeast - U", 150, 55);
-		font.draw(batch, "Move Southwest - B", 150, 40);
-		font.draw(batch, "Move Souteast - N", 150, 25);
+		font.draw(batch, "Move Northwest - Y", 155, 70);
+		font.draw(batch, "Move Northeast - U", 155, 55);
+		font.draw(batch, "Move Southwest - B", 155, 40);
+		font.draw(batch, "Move Souteast - N", 155, 25);
+		font.draw(batch, "Exit - Q", 325, 70);
 	}
 }
