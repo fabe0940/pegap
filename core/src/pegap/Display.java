@@ -15,7 +15,7 @@ import pegap.Model;
 import pegap.Tile;
 
 class Display {
-	public static final int SCROLL_BAND = 20;
+	public static final int SCROLL_BAND = 5;
 	public static final int SCROLL_RATE = 10;
 	public static final int TILE_WIDTH = 128;
 	public static final int TILE_HEIGHT = 64;

@@ -19,24 +19,6 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	private Input modelInput;
 	private Model game;
 
-	private void  processInput() {
-		Vector2 mousePos;
-
-		mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-		if(mousePos.y < Display.SCROLL_BAND) {
-			screenInput.scrollUp = true;
-		}
-		if(mousePos.y > (Display.WINDOW_HEIGHT - Display.SCROLL_BAND)) {
-			screenInput.scrollDown = true;
-		}
-		if(mousePos.x < Display.SCROLL_BAND) {
-			screenInput.scrollLeft = true;
-		}
-		if(mousePos.x > (Display.WINDOW_WIDTH - Display.SCROLL_BAND)) {
-			screenInput.scrollRight = true;
-		}
-	}
-
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -55,7 +37,6 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
-		processInput();
 		screen.update(screenInput);
 		game.update(modelInput);
 
@@ -76,20 +57,20 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown (int keycode) {
-		if(keycode == Keys.UP) screenInput.scrollUp = true;
-		if(keycode == Keys.DOWN) screenInput.scrollDown = true;
-		if(keycode == Keys.LEFT) screenInput.scrollLeft = true;
-		if(keycode == Keys.RIGHT) screenInput.scrollRight = true;
+		if(keycode == Keys.K) screenInput.scrollUp = true;
+		if(keycode == Keys.J) screenInput.scrollDown = true;
+		if(keycode == Keys.H) screenInput.scrollLeft = true;
+		if(keycode == Keys.L) screenInput.scrollRight = true;
 
 		return true;
 	}
 
 	@Override
 	public boolean keyUp (int keycode) {
-		if(keycode == Keys.UP) screenInput.scrollUp = false;
-		if(keycode == Keys.DOWN) screenInput.scrollDown = false;
-		if(keycode == Keys.LEFT) screenInput.scrollLeft = false;
-		if(keycode == Keys.RIGHT) screenInput.scrollRight = false;
+		if(keycode == Keys.K) screenInput.scrollUp = false;
+		if(keycode == Keys.J) screenInput.scrollDown = false;
+		if(keycode == Keys.H) screenInput.scrollLeft = false;
+		if(keycode == Keys.L) screenInput.scrollRight = false;
 
 		return true;
 	}
