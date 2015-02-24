@@ -10,9 +10,12 @@ import pegap.Input;
 class Model {
 	public static int WORLD_SIZE = 0;
 
+	public int level;
+	public int turn;
+
 	private List<Tile> map;
 
-	private void mapFromFile(int level) {
+	private void mapFromFile(int l) {
 		int i;
 		int x;
 		int y;
@@ -24,7 +27,7 @@ class Model {
 		String[] vals;
 		FileHandle fin;
 
-		fname = new String("lvl/" + String.format("%04d", level) + ".txt");
+		fname = new String("lvl/" + String.format("%04d", l) + ".txt");
 
 		Gdx.app.debug("Model:mapFromFile", "Loading map " + fname);
 		fin = Gdx.files.internal(fname);
@@ -57,8 +60,10 @@ class Model {
 		this(1);
 	}
 
-	Model(int level) {
-		mapFromFile(level);
+	Model(int l) {
+		mapFromFile(l);
+		level = l;
+		turn = 0;
 	}
 
 	public void update(Input in) {

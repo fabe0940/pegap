@@ -29,6 +29,8 @@ class Display {
 	private static final int OFFSET_INIT_X = (int) (0.5 * Model.WORLD_SIZE * TILE_WIDTH);
 	private static final int OFFSET_INIT_Y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
 	private static final int SCROLL_RATE = 7;
+	private static final int UI_TEX_INTERFACE = 101;
+	private static final int UI_TEX_STATUS = 102;
 
 	public static Vector2 worldToScreen(Vector2 pos) {
 		Vector2 res = new Vector2();
@@ -67,7 +69,7 @@ class Display {
 		Gdx.app.log("Display:Display", "Generating font " + fname);
 		fgen = new FreeTypeFontGenerator(Gdx.files.internal(fname));
 		font = fgen.generateFont(12);
-		font.setColor(Color.WHITE);
+		font.setColor(Color.BLACK);
 	}
 
 	public void update(Input in) {
@@ -86,6 +88,7 @@ class Display {
 		int type;
 		List<Tile> map = m.getMap();
 		String fname;
+		String msg;
 		Tile t;
 		Vector2 pos;
  
@@ -94,6 +97,28 @@ class Display {
 
 		batch.begin();
 
+		renderModel(m);
+		renderStatus(m);
+		renderInterface(m);
+
+		batch.end();
+	}
+
+	public void dispose() {
+		fgen.dispose();
+
+		for(Map.Entry item : textures.entrySet()) {
+			((Texture) item.getValue()).dispose();
+		}
+	}
+
+	private void renderModel(Model m) {
+		int type;
+		List<Tile> map = m.getMap();
+		String fname;
+		Tile t;
+		Vector2 pos;
+ 
 		for(int i = 0; i < map.size(); i++) {
 			t = map.get(i);
 			pos = worldToScreen(t.pos);
@@ -110,25 +135,63 @@ class Display {
 
 			sprite = new Sprite(textures.get(type));
 			sprite.setPosition(pos.x, pos.y);
-
 			sprite.draw(batch);
 
 		}
+	}
+
+	private void renderStatus(Model m) {
+		String fname;
+		String msg;
+		Vector2 pos;
+
+		if((textures.get(UI_TEX_STATUS)) == null) {
+			fname = new String("img/" + String.format("%04d", UI_TEX_STATUS) + ".png");
+			Gdx.app.debug("Diplay:render", "Adding texture " + fname);
+			textures.put(UI_TEX_STATUS, new Texture(Gdx.files.internal(fname)));
+		}
+
+		sprite = new Sprite(textures.get(UI_TEX_STATUS));
+		sprite.setPosition(0, WINDOW_HEIGHT - 16);
+		sprite.draw(batch);
+
+		msg = new String("Level " + String.format("%02d", m.level));
+		font.draw(batch, msg, 5, WINDOW_HEIGHT - 1);
+
+		msg = new String("Turn " + String.format("%03d", m.turn));
+		font.draw(batch, msg, 105, WINDOW_HEIGHT - 1);
 
 		pos = new Vector2();
 		pos.x = (0.5f * WINDOW_WIDTH) - offset.x;
 		pos.y = (0.5f * WINDOW_HEIGHT) - offset.y;
 		pos = screenToWorld(pos);
-		font.draw(batch, "[ " + ((int) pos.x) + " , " + ((int) pos.y) + " ]", WINDOW_WIDTH - 100, WINDOW_HEIGHT);
 
-		batch.end();
+		msg = new String("(" + ((int) pos.x) + "," + ((int) pos.y) + ")");
+		font.draw(batch, msg, WINDOW_WIDTH - 50, WINDOW_HEIGHT - 1);
 	}
 
-	public void dispose() {
-		fgen.dispose();
+	private void renderInterface(Model m) {
+		String fname;
+		String msg;
 
-		for(Map.Entry item : textures.entrySet()) {
-			((Texture) item.getValue()).dispose();
+		if((textures.get(UI_TEX_INTERFACE)) == null) {
+			fname = new String("img/" + String.format("%04d", UI_TEX_INTERFACE) + ".png");
+			Gdx.app.debug("Diplay:render", "Adding texture " + fname);
+			textures.put(UI_TEX_INTERFACE, new Texture(Gdx.files.internal(fname)));
 		}
+
+		sprite = new Sprite(textures.get(UI_TEX_INTERFACE));
+		sprite.setPosition(0, 0);
+		sprite.draw(batch);
+
+		font.draw(batch, "Controls:", 5, 95);
+		font.draw(batch, "Scroll West - H", 5, 70);
+		font.draw(batch, "Scroll South - J", 5, 55);
+		font.draw(batch, "Scroll North - K", 5, 40);
+		font.draw(batch, "Scroll East - L", 5, 25);
+		font.draw(batch, "Move Northwest - Y", 150, 70);
+		font.draw(batch, "Move Northeast - U", 150, 55);
+		font.draw(batch, "Move Southwest - B", 150, 40);
+		font.draw(batch, "Move Souteast - N", 150, 25);
 	}
 }
