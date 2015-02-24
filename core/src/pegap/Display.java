@@ -6,8 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 
 import pegap.Input;
@@ -20,12 +22,12 @@ class Display {
 	public static final int WINDOW_WIDTH = Gdx.graphics.getWidth();
 	public static final int WINDOW_HEIGHT = Gdx.graphics.getHeight();
 
-	private static final int OFFSET_MIN_X = (int) (0.0 * WINDOW_WIDTH);
-	private static final int OFFSET_MAX_X = (int) (1.0 * WINDOW_WIDTH);
-	private static final int OFFSET_MIN_Y = (int) (-0.5 * WINDOW_HEIGHT);
-	private static final int OFFSET_MAX_Y = (int) (0.5 * WINDOW_HEIGHT);
-	private static final int OFFSET_INIT_X = (int) (0.5 * WINDOW_WIDTH);
-	private static final int OFFSET_INIT_Y = (int) ((0.5 * WINDOW_HEIGHT) - (0.5 * Model.WORLD_SIZE * TILE_HEIGHT));
+	private static final int OFFSET_MIN_X = (int) (-0.5 * Model.WORLD_SIZE * TILE_WIDTH);
+	private static final int OFFSET_MAX_X = (int) (WINDOW_WIDTH + (0.5 * Model.WORLD_SIZE * TILE_WIDTH));
+	private static final int OFFSET_MIN_Y = (int) (-1.0 * Model.WORLD_SIZE * TILE_HEIGHT);
+	private static final int OFFSET_MAX_Y = (int) (WINDOW_HEIGHT + (Model.WORLD_SIZE * TILE_HEIGHT));
+	private static final int OFFSET_INIT_X = (int) (0.5 * Model.WORLD_SIZE * TILE_WIDTH);
+	private static final int OFFSET_INIT_Y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
 	private static final int SCROLL_RATE = 7;
 
 	public static Vector2 worldToScreen(Vector2 pos) {
@@ -50,12 +52,22 @@ class Display {
 	private SpriteBatch batch;
 	private Sprite sprite;
 	private Map<Integer, Texture> textures;
+	private BitmapFont font;
+	private FreeTypeFontGenerator fgen;
 
 	Display() {
+		String fname;
+
 		batch = new SpriteBatch();
 		textures = new HashMap<Integer, Texture>();
-		Gdx.app.log("Display:Display", "offset: (" + OFFSET_INIT_X + "," + OFFSET_INIT_Y + ")");
 		offset = new Vector2(OFFSET_INIT_X, OFFSET_INIT_Y);
+
+		fname = new String("font/komika.ttf");
+
+		Gdx.app.log("Display:Display", "Generating font " + fname);
+		fgen = new FreeTypeFontGenerator(Gdx.files.internal(fname));
+		font = fgen.generateFont(12);
+		font.setColor(Color.WHITE);
 	}
 
 	public void update(Input in) {
@@ -103,10 +115,18 @@ class Display {
 
 		}
 
+		pos = new Vector2();
+		pos.x = (0.5f * WINDOW_WIDTH) - offset.x;
+		pos.y = (0.5f * WINDOW_HEIGHT) - offset.y;
+		pos = screenToWorld(pos);
+		font.draw(batch, "[ " + ((int) pos.x) + " , " + ((int) pos.y) + " ]", WINDOW_WIDTH - 100, WINDOW_HEIGHT);
+
 		batch.end();
 	}
 
 	public void dispose() {
+		fgen.dispose();
+
 		for(Map.Entry item : textures.entrySet()) {
 			((Texture) item.getValue()).dispose();
 		}

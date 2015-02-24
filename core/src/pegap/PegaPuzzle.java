@@ -15,8 +15,7 @@ import pegap.Model;
 
 public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	private Display screen;
-	private Input screenInput;
-	private Input modelInput;
+	private Input input;
 	private Model game;
 
 	@Override
@@ -24,10 +23,9 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.input.setInputProcessor(this);
 
-		screen = new Display();
 		game = new Model();
-		screenInput = new Input();
-		modelInput = new Input();
+		screen = new Display();
+		input = new Input();
 	}
 
 	@Override
@@ -37,8 +35,8 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
-		screen.update(screenInput);
-		game.update(modelInput);
+		screen.update(input);
+		game.update(input);
 
 		screen.render(game);
 	}
@@ -57,26 +55,28 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown (int keycode) {
-		if(keycode == Keys.K) screenInput.scrollUp = true;
-		if(keycode == Keys.J) screenInput.scrollDown = true;
-		if(keycode == Keys.H) screenInput.scrollLeft = true;
-		if(keycode == Keys.L) screenInput.scrollRight = true;
+		if(keycode == Keys.K) input.scrollUp = true;
+		if(keycode == Keys.J) input.scrollDown = true;
+		if(keycode == Keys.H) input.scrollLeft = true;
+		if(keycode == Keys.L) input.scrollRight = true;
 
 		return true;
 	}
 
 	@Override
 	public boolean keyUp (int keycode) {
-		if(keycode == Keys.K) screenInput.scrollUp = false;
-		if(keycode == Keys.J) screenInput.scrollDown = false;
-		if(keycode == Keys.H) screenInput.scrollLeft = false;
-		if(keycode == Keys.L) screenInput.scrollRight = false;
+		if(keycode == Keys.K) input.scrollUp = false;
+		if(keycode == Keys.J) input.scrollDown = false;
+		if(keycode == Keys.H) input.scrollLeft = false;
+		if(keycode == Keys.L) input.scrollRight = false;
 
 		return true;
 	}
 
 	@Override
 	public boolean keyTyped (char character) {
+		if(character == '?') input.help = true;
+
 		return false;
 	}
 
