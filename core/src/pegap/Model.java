@@ -10,7 +10,6 @@ class Model {
 	public static final int WORLD_SIZE = 8;
 
 	private List<Tile> map;
-	private Vector2 lastClick;
 
 	Model() {
 		int i;
@@ -25,31 +24,9 @@ class Model {
 				map.add(new Tile(i, j, type));
 			}
 		}
-
-		lastClick = null;
 	}
 
 	public void update(Input in) {
-		Iterator<Vector2> iter;
-
-		for(Tile tile : map) {
-			tile.type = tile.type % 10 != 2 ? tile.type : tile.type - 1;
-		}
-
-		iter = in.clicks.iterator();
-		while(iter.hasNext()) {
-			lastClick = iter.next();
-
-			Gdx.app.debug("Model:update", "Processing click (" + lastClick.x + "," + lastClick.y + ")");
-
-			iter.remove();
-		}
-
-		for(Tile tile : map) {
-			if(lastClick != null && tile.pos.equals(lastClick)) {
-				tile.type = tile.type + 1;
-			}
-		}
 	}
 
 	public List<Tile> getMap() {

@@ -82,29 +82,7 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean touchDown (int x, int y, int pointer, int button) {
-		Vector2 screenPos;
-		Vector2 worldPos;
-
-		screenPos = new Vector2(x, Display.WINDOW_HEIGHT - y);
-
-		if((screenPos.y < Display.UI_SIDE_HEIGHT && Math.abs((Display.WINDOW_WIDTH / 2) - screenPos.x) > (Display.UI_CENTER_WIDTH / 2)) || (screenPos.y < Display.UI_CENTER_HEIGHT)) {
-			if(button == Buttons.LEFT) {
-				screenInput.clicks.add(screenPos);
-			}
-		} else {
-			screenPos.x -= screen.offset.x;
-			screenPos.y -= screen.offset.y;
-
-			worldPos = Display.screenToWorld(screenPos);
-			worldPos.x = (int) Math.floor(worldPos.x);
-			worldPos.y = (int) Math.floor(worldPos.y);
-
-			if(button == Buttons.LEFT) {
-				modelInput.clicks.add(worldPos);
-			}
-		}
-
-		return true;
+		return false;
 	}
 
 	@Override
