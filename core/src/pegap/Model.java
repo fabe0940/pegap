@@ -12,10 +12,10 @@ class Model {
 
 	public int level;
 	public int turn;
+	public List<Tile> map;
+	public Player p;
 
-	private List<Tile> map;
-
-	private void mapFromFile(int l) {
+	private List<Tile> mapFromFile(int l) {
 		int i;
 		int x;
 		int y;
@@ -26,6 +26,7 @@ class Model {
 		String fcontents;
 		String[] vals;
 		FileHandle fin;
+		List<Tile> res;
 
 		fname = new String("lvl/" + String.format("%04d", l) + ".txt");
 
@@ -46,14 +47,16 @@ class Model {
 			types[x][y] = Integer.parseInt(vals[i]);
 		}
 
-		if(map == null) map = new ArrayList<Tile>();
+		res = new ArrayList<Tile>();
 
 		for(x = 0; x < width; x++) {
 			for(y = 0; y < height; y++) {
 				if(types[x][y] == -1) continue;
-				map.add(new Tile(x, y, types[x][y]));
+				res.add(new Tile(x, y, types[x][y]));
 			}
 		}
+
+		return res;
 	}
 
 	Model() {
@@ -61,15 +64,36 @@ class Model {
 	}
 
 	Model(int l) {
-		mapFromFile(l);
+		p = new Player();
 		level = l;
 		turn = 0;
+
+		map = mapFromFile(l);
 	}
 
 	public void update(Input in) {
-	}
+		if(in.moveNorthwest == true) {
+			turn++;
+			p.pos.y += 1;
+			in.moveNorthwest = false;
+		}
 
-	public List<Tile> getMap() {
-		return map;
+		if(in.moveNortheast == true) {
+			turn++;
+			p.pos.x += 1;
+			in.moveNortheast = false;
+		}
+
+		if(in.moveSouthwest == true) {
+			turn++;
+			p.pos.x -= 1;
+			in.moveSouthwest = false;
+		}
+
+		if(in.moveSoutheast == true) {
+			turn++;
+			p.pos.y -= 1;
+			in.moveSoutheast = false;
+		}
 	}
 }

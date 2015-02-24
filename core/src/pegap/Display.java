@@ -29,6 +29,7 @@ class Display {
 	private static final int OFFSET_INIT_X = (int) (0.5 * Model.WORLD_SIZE * TILE_WIDTH);
 	private static final int OFFSET_INIT_Y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
 	private static final int SCROLL_RATE = 7;
+	private static final int TILE_PLAYER = 1001;
 	private static final int UI_TEX_INTERFACE = 101;
 	private static final int UI_TEX_STATUS = 102;
 
@@ -73,10 +74,10 @@ class Display {
 	}
 
 	public void update(Input in) {
-		if(in.scrollUp) offset.y -= SCROLL_RATE;
-		if(in.scrollDown) offset.y += SCROLL_RATE;
-		if(in.scrollLeft) offset.x += SCROLL_RATE;
-		if(in.scrollRight) offset.x -= SCROLL_RATE;
+		if(in.scrollNorth) offset.y -= SCROLL_RATE;
+		if(in.scrollSouth) offset.y += SCROLL_RATE;
+		if(in.scrollEast) offset.x -= SCROLL_RATE;
+		if(in.scrollWest) offset.x += SCROLL_RATE;
 
 		if(offset.x < OFFSET_MIN_X) offset.x = OFFSET_MIN_X;
 		if(offset.x > OFFSET_MAX_X) offset.x = OFFSET_MAX_X;
@@ -86,7 +87,7 @@ class Display {
 
 	public void render(Model m) {
 		int type;
-		List<Tile> map = m.getMap();
+		List<Tile> map = m.map;
 		String fname;
 		String msg;
 		Tile t;
@@ -95,6 +96,8 @@ class Display {
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		batch.enableBlending();
+		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin();
 
 		renderModel(m);
@@ -114,7 +117,7 @@ class Display {
 
 	private void renderModel(Model m) {
 		int type;
-		List<Tile> map = m.getMap();
+		List<Tile> map = m.map;
 		String fname;
 		Tile t;
 		Vector2 pos;
@@ -137,6 +140,18 @@ class Display {
 			sprite.setPosition(pos.x, pos.y);
 			sprite.draw(batch);
 
+			if((textures.get(TILE_PLAYER)) == null) {
+				fname = new String("img/" + String.format("%04d", TILE_PLAYER) + ".png");
+				Gdx.app.debug("Display:render", "Adding texture " + fname);
+				textures.put(TILE_PLAYER, new Texture(Gdx.files.internal(fname)));
+			}
+
+			sprite = new Sprite(textures.get(TILE_PLAYER));
+			pos = worldToScreen(m.p.pos);
+			pos.x += offset.x - (TILE_WIDTH / 2);
+			pos.y += offset.y;
+			sprite.setPosition(pos.x, pos.y);
+			sprite.draw(batch);
 		}
 	}
 

@@ -4,15 +4,23 @@ import java.util.*;
 import com.badlogic.gdx.math.Vector2;
 
 class Input {
-	public boolean scrollUp;
-	public boolean scrollDown;
-	public boolean scrollLeft;
-	public boolean scrollRight;
+	public boolean scrollNorth;
+	public boolean scrollSouth;
+	public boolean scrollWest;
+	public boolean scrollEast;
+	public boolean moveNorthwest;
+	public boolean moveNortheast;
+	public boolean moveSouthwest;
+	public boolean moveSoutheast;
 
 	Input() {
-		scrollUp = false;
-		scrollDown = false;
-		scrollLeft = false;
-		scrollRight = false;
+		scrollNorth = false;
+		scrollSouth = false;
+		scrollWest = false;
+		scrollEast = false;
+		moveNorthwest = false;
+		moveNortheast = false;
+		moveSouthwest = false;
+		moveSoutheast = false;
 	}
 }

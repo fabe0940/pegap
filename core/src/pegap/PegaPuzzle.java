@@ -55,20 +55,20 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown (int keycode) {
-		if(keycode == Keys.K) input.scrollUp = true;
-		if(keycode == Keys.J) input.scrollDown = true;
-		if(keycode == Keys.H) input.scrollLeft = true;
-		if(keycode == Keys.L) input.scrollRight = true;
+		if(keycode == Keys.K) input.scrollNorth = true;
+		if(keycode == Keys.J) input.scrollSouth = true;
+		if(keycode == Keys.H) input.scrollWest = true;
+		if(keycode == Keys.L) input.scrollEast = true;
 
 		return true;
 	}
 
 	@Override
 	public boolean keyUp (int keycode) {
-		if(keycode == Keys.K) input.scrollUp = false;
-		if(keycode == Keys.J) input.scrollDown = false;
-		if(keycode == Keys.H) input.scrollLeft = false;
-		if(keycode == Keys.L) input.scrollRight = false;
+		if(keycode == Keys.K) input.scrollNorth = false;
+		if(keycode == Keys.J) input.scrollSouth = false;
+		if(keycode == Keys.H) input.scrollWest = false;
+		if(keycode == Keys.L) input.scrollEast = false;
 
 		return true;
 	}
@@ -76,6 +76,10 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	@Override
 	public boolean keyTyped (char character) {
 		if(character == 'q') Gdx.app.exit();
+		if(character == 'y') input.moveNorthwest = true;
+		if(character == 'u') input.moveNortheast = true;
+		if(character == 'b') input.moveSouthwest = true;
+		if(character == 'n') input.moveSoutheast = true;
 
 		return false;
 	}
