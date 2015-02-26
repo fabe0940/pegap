@@ -75,15 +75,21 @@ class Display {
 		font.setColor(Color.BLACK);
 	}
 
-	public void update(Input in) {
+	public void update(Input in, Model m) {
+		int x;
+		int y;
+		Vector2 pos;
+
 		if(in.scrollNorth) offset.y -= SCROLL_RATE;
 		if(in.scrollSouth) offset.y += SCROLL_RATE;
 		if(in.scrollEast) offset.x -= SCROLL_RATE;
 		if(in.scrollWest) offset.x += SCROLL_RATE;
 
 		if(in.resetOffset) {
-			offset.x = (int) (0.5 * Model.WORLD_SIZE * TILE_WIDTH);
-			offset.y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
+			pos = worldToScreen(m.p.pos);
+			pos.x = (int) ((0.5 * WINDOW_WIDTH) - pos.x);
+			pos.y = (int) ((0.5 * WINDOW_HEIGHT) - pos.y);
+			offset = pos;
 			in.resetOffset = false;
 		}
 
@@ -185,7 +191,7 @@ class Display {
 		sprite.setPosition(0, WINDOW_HEIGHT - 16);
 		sprite.draw(batch);
 
-		msg = new String("Level " + String.format("%02d", m.level));
+		msg = new String("Level " + String.format("%02d", m.level) + "/" + String.format("%02d", Model.MAX_LEVEL));
 		font.draw(batch, msg, 5, WINDOW_HEIGHT - 1);
 
 		msg = new String("Turn " + String.format("%03d", m.turn));
@@ -222,7 +228,8 @@ class Display {
 		font.draw(batch, "Move Southwest - B", 155, 40);
 		font.draw(batch, "Move Souteast - N", 155, 25);
 		font.draw(batch, "Wait - W", 325, 70);
-		font.draw(batch, "Exit - Q", 325, 55);
+		font.draw(batch, "Center Screen - Space", 325, 55);
+		font.draw(batch, "Exit - Q", 325, 40);
 
 		batch.end();
 	}

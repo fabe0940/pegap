@@ -9,6 +9,7 @@ import pegap.Player;
 import pegap.Enemy;
 
 class Model {
+	public static final int MAX_LEVEL = 6;
 	public static int WORLD_SIZE = 0;
 
 	public int level;
@@ -68,6 +69,23 @@ class Model {
 			terrain.put(new Vector2(x, y), new Tile(x, y, type));
 		}
 	}
+
+	private List<Enemy> shuffleEnemies(Collection<Enemy> c) {
+		Object[] arr;
+		List<Enemy> L;
+
+		arr = c.toArray();
+		L = new ArrayList<Enemy>();
+
+		for(Object e : arr) {
+			L.add((Enemy) e);
+		}
+
+		Collections.shuffle(L);
+
+		return L;
+	}
+
 
 	Model() {
 		this(1);
@@ -135,9 +153,11 @@ class Model {
 						update = true;
 						turn++;
 						p.pos = move;
+						in.resetOffset = true;
 
 						if(target != null) {
 							world.remove(target.pos);
+							turn--;
 							update = false;
 							target = null;
 						}
@@ -148,8 +168,8 @@ class Model {
 
 			if(res == 0 && update == true) {
 				tries = 0;
-				while(update == true && tries++ < world.size()) {
-					for(Enemy e : world.values()) {
+				while(update == true && tries++ < 10 * world.size()) {
+					for(Enemy e : shuffleEnemies(world.values())) {
 						if(e.moved == true) continue;
 
 						pos = e.pos;

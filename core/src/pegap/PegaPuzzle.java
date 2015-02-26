@@ -14,8 +14,6 @@ import pegap.Input;
 import pegap.Model;
 
 public class PegaPuzzle implements ApplicationListener, InputProcessor {
-	private static final int MAX_LEVEL = 2;
-
 	private int level;
 	private Display screen;
 	private Input input;
@@ -31,6 +29,7 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 		game = new Model(level);
 		screen = new Display();
 		input = new Input();
+		input.resetOffset = true;
 	}
 
 	@Override
@@ -40,9 +39,9 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
-		screen.update(input);
+		screen.update(input, game);
 		if(game.update(input) == 1) {
-			if(++level > MAX_LEVEL) {
+			if(++level > Model.MAX_LEVEL) {
 				Gdx.app.log("PegaPuzzle:render", "you win!");
 				Gdx.app.exit();
 			} else {
@@ -109,6 +108,9 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 		if(character == 'w') {
 			input.move = true;
 			input.moveNone = true;
+		}
+		if(character == ' ') {
+			input.resetOffset = true;
 		}
 
 		return false;
