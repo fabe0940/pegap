@@ -4,17 +4,29 @@ import java.util.*;
 import com.badlogic.gdx.math.Vector2;
 
 class Input {
-	public boolean scrollUp;
-	public boolean scrollDown;
-	public boolean scrollLeft;
-	public boolean scrollRight;
-	public List<Vector2> clicks;
+	public boolean scrollNorth;
+	public boolean scrollSouth;
+	public boolean scrollWest;
+	public boolean scrollEast;
+	public boolean move;
+	public boolean moveNorthwest;
+	public boolean moveNortheast;
+	public boolean moveSouthwest;
+	public boolean moveSoutheast;
+	public boolean moveNone;
+	public boolean resetOffset;
 
 	Input() {
-		scrollUp = false;
-		scrollDown = false;
-		scrollLeft = false;
-		scrollRight = false;
-		clicks = new ArrayList<Vector2>();
+		scrollNorth = false;
+		scrollSouth = false;
+		scrollWest = false;
+		scrollEast = false;
+		move = false;
+		moveNorthwest = false;
+		moveNortheast = false;
+		moveSouthwest = false;
+		moveSoutheast = false;
+		moveNone = false;
+		resetOffset = false;
 	}
 }
