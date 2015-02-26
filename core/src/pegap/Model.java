@@ -11,7 +11,7 @@ import pegap.Enemy;
 class Model {
 	public static final int LEVEL_WIN = 999;
 	public static final int LEVEL_DEATH = 666;
-	public static final int MAX_LEVEL = 7;
+	public static final int MAX_LEVEL = 10;
 	public static int WORLD_SIZE = 0;
 
 	public int level;

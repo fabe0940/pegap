@@ -24,7 +24,7 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.input.setInputProcessor(this);
 
-		level = 7;
+		level = 1;
 
 		game = new Model(level);
 		screen = new Display();
