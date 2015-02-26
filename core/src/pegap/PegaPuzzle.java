@@ -76,10 +76,23 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 	@Override
 	public boolean keyTyped (char character) {
 		if(character == 'q') Gdx.app.exit();
-		if(character == 'y') input.moveNorthwest = true;
-		if(character == 'u') input.moveNortheast = true;
-		if(character == 'b') input.moveSouthwest = true;
-		if(character == 'n') input.moveSoutheast = true;
+
+		if(character == 'y') {
+			input.move = true;
+			input.moveNorthwest = true;
+		}
+		if(character == 'u') {
+			input.move = true;
+			input.moveNortheast = true;
+		}
+		if(character == 'b') {
+			input.move = true;
+			input.moveSouthwest = true;
+		}
+		if(character == 'n') {
+			input.move = true;
+			input.moveSoutheast = true;
+		}
 
 		return false;
 	}

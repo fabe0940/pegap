@@ -12,10 +12,10 @@ class Model {
 
 	public int level;
 	public int turn;
-	public List<Tile> map;
+	public Map<Vector2, Tile> map;
 	public Player p;
 
-	private List<Tile> mapFromFile(int l) {
+	private Map<Vector2, Tile> mapFromFile(int l) {
 		int i;
 		int x;
 		int y;
@@ -26,7 +26,7 @@ class Model {
 		String fcontents;
 		String[] vals;
 		FileHandle fin;
-		List<Tile> res;
+		Map<Vector2, Tile>res;
 
 		fname = new String("lvl/" + String.format("%04d", l) + ".txt");
 
@@ -47,12 +47,12 @@ class Model {
 			types[x][y] = Integer.parseInt(vals[i]);
 		}
 
-		res = new ArrayList<Tile>();
+		res = new HashMap<Vector2, Tile>();
 
 		for(x = 0; x < width; x++) {
 			for(y = 0; y < height; y++) {
 				if(types[x][y] == -1) continue;
-				res.add(new Tile(x, y, types[x][y]));
+				res.put(new Vector2(x, y), new Tile(x, y, types[x][y]));
 			}
 		}
 
@@ -72,28 +72,55 @@ class Model {
 	}
 
 	public void update(Input in) {
-		if(in.moveNorthwest == true) {
-			turn++;
-			p.pos.y += 1;
-			in.moveNorthwest = false;
-		}
+		Vector2 move;
+		Tile dest;
 
-		if(in.moveNortheast == true) {
-			turn++;
-			p.pos.x += 1;
-			in.moveNortheast = false;
-		}
+		if(in.move == true) {
+			if(in.moveNorthwest == true) {
+				move = new Vector2(p.pos.x, p.pos.y + 1);
+				if((dest = map.get(move)) != null) {
+					if(dest.type == Tile.TYPE_NORMAL) {
+						turn++;
+						p.pos.y += 1;
+					}
+				}
+				in.moveNorthwest = false;
+			}
 
-		if(in.moveSouthwest == true) {
-			turn++;
-			p.pos.x -= 1;
-			in.moveSouthwest = false;
-		}
+			if(in.moveNortheast == true) {
+				move = new Vector2(p.pos.x + 1, p.pos.y);
+				if((dest = map.get(move)) != null) {
+					if(dest.type == Tile.TYPE_NORMAL) {
+						turn++;
+						p.pos.x += 1;
+					}
+				}
+				in.moveNortheast = false;
+			}
 
-		if(in.moveSoutheast == true) {
-			turn++;
-			p.pos.y -= 1;
-			in.moveSoutheast = false;
+			if(in.moveSouthwest == true) {
+				move = new Vector2(p.pos.x - 1, p.pos.y);
+				if((dest = map.get(move)) != null) {
+					if(dest.type == Tile.TYPE_NORMAL) {
+						turn++;
+						p.pos.x -= 1;
+					}
+				}
+				in.moveSouthwest = false;
+			}
+
+			if(in.moveSoutheast == true) {
+				move = new Vector2(p.pos.x, p.pos.y - 1);
+				if((dest = map.get(move)) != null) {
+					if(dest.type == Tile.TYPE_NORMAL) {
+						turn++;
+						p.pos.y -= 1;
+					}
+				}
+				in.moveSoutheast = false;
+			}
+
+			in.move = false;
 		}
 	}
 }

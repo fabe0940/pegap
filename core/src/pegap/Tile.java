@@ -24,17 +24,6 @@ public class Tile {
 
 	Tile(Vector2 v, int t) {
 		pos = v;
-
-		switch(t) {
-			case TYPE_NORMAL:
-				if((v.x + v.y) % 2 == 0) {
-					type = TYPE_NORMAL_LIGHT;
-				} else {
-					type = TYPE_NORMAL_DARK;
-				}
-				break;
-			default:
-				type = TYPE_NORMAL_LIGHT;
-		}
+		type = t;
 	}
 }

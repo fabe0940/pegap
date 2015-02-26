@@ -86,13 +86,6 @@ class Display {
 	}
 
 	public void render(Model m) {
-		int type;
-		List<Tile> map = m.map;
-		String fname;
-		String msg;
-		Tile t;
-		Vector2 pos;
- 
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -113,20 +106,26 @@ class Display {
 
 	private void renderModel(Model m) {
 		int type;
-		List<Tile> map = m.map;
+		Map<Vector2, Tile> map = m.map;
 		String fname;
-		Tile t;
 		Vector2 pos;
 
 		batch.begin();
  
-		for(int i = 0; i < map.size(); i++) {
-			t = map.get(i);
+		for(Tile t : map.values()) {
 			pos = worldToScreen(t.pos);
 			pos.x += offset.x - (TILE_WIDTH / 2);
 			pos.y += offset.y;
 
 			type = t.type;
+
+			if(type == Tile.TYPE_NORMAL) {
+				if((t.pos.x + t.pos.y) % 2 == 0) {
+					type = Tile.TYPE_NORMAL_LIGHT;
+				} else {
+					type = Tile.TYPE_NORMAL_DARK;
+				}
+			}
 
 			if((textures.get(type)) == null) {
 				fname = new String("img/" + String.format("%04d", type) + ".png");

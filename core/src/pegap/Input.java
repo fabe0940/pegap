@@ -8,6 +8,7 @@ class Input {
 	public boolean scrollSouth;
 	public boolean scrollWest;
 	public boolean scrollEast;
+	public boolean move;
 	public boolean moveNorthwest;
 	public boolean moveNortheast;
 	public boolean moveSouthwest;
@@ -18,6 +19,7 @@ class Input {
 		scrollSouth = false;
 		scrollWest = false;
 		scrollEast = false;
+		move = false;
 		moveNorthwest = false;
 		moveNortheast = false;
 		moveSouthwest = false;
