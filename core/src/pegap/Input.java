@@ -13,6 +13,7 @@ class Input {
 	public boolean moveNortheast;
 	public boolean moveSouthwest;
 	public boolean moveSoutheast;
+	public boolean resetOffset;
 
 	Input() {
 		scrollNorth = false;
@@ -24,5 +25,6 @@ class Input {
 		moveNortheast = false;
 		moveSouthwest = false;
 		moveSoutheast = false;
+		resetOffset = false;
 	}
 }

@@ -30,8 +30,9 @@ class Display {
 	private static final int OFFSET_INIT_Y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
 	private static final int SCROLL_RATE = 7;
 	private static final int TILE_PLAYER = 1000;
-	private static final int UI_TEX_INTERFACE = 100;
-	private static final int UI_TEX_STATUS = 101;
+	private static final int UI_TEX_BACK = 100;
+	private static final int UI_TEX_INTERFACE = 101;
+	private static final int UI_TEX_STATUS = 102;
 
 	public static Vector2 worldToScreen(Vector2 pos) {
 		Vector2 res = new Vector2();
@@ -79,6 +80,12 @@ class Display {
 		if(in.scrollEast) offset.x -= SCROLL_RATE;
 		if(in.scrollWest) offset.x += SCROLL_RATE;
 
+		if(in.resetOffset) {
+			offset.x = (int) (0.5 * Model.WORLD_SIZE * TILE_WIDTH);
+			offset.y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
+			in.resetOffset = false;
+		}
+
 		if(offset.x < OFFSET_MIN_X) offset.x = OFFSET_MIN_X;
 		if(offset.x > OFFSET_MAX_X) offset.x = OFFSET_MAX_X;
 		if(offset.y < OFFSET_MIN_Y) offset.y = OFFSET_MIN_Y;
@@ -104,13 +111,28 @@ class Display {
 		}
 	}
 
+	private Texture getTexture(int type) {
+		String fname;
+
+		if((textures.get(type)) == null) {
+			fname = new String("img/" + String.format("%04d", type) + ".png");
+			Gdx.app.debug("Display:render", "Adding texture " + fname);
+			textures.put(type, new Texture(Gdx.files.internal(fname)));
+		}
+
+		return textures.get(type);
+	}
+
 	private void renderModel(Model m) {
 		int type;
 		Map<Vector2, Tile> map = m.map;
-		String fname;
 		Vector2 pos;
 
 		batch.begin();
+
+		sprite = new Sprite(getTexture(UI_TEX_BACK));
+		sprite.setPosition(0, 0);
+		sprite.draw(batch);
  
 		for(Tile t : map.values()) {
 			pos = worldToScreen(t.pos);
@@ -127,23 +149,11 @@ class Display {
 				}
 			}
 
-			if((textures.get(type)) == null) {
-				fname = new String("img/" + String.format("%04d", type) + ".png");
-				Gdx.app.debug("Display:render", "Adding texture " + fname);
-				textures.put(type, new Texture(Gdx.files.internal(fname)));
-			}
-
-			sprite = new Sprite(textures.get(type));
+			sprite = new Sprite(getTexture(type));
 			sprite.setPosition(pos.x, pos.y);
 			sprite.draw(batch);
 
-			if((textures.get(TILE_PLAYER)) == null) {
-				fname = new String("img/" + String.format("%04d", TILE_PLAYER) + ".png");
-				Gdx.app.debug("Display:render", "Adding texture " + fname);
-				textures.put(TILE_PLAYER, new Texture(Gdx.files.internal(fname)));
-			}
-
-			sprite = new Sprite(textures.get(TILE_PLAYER));
+			sprite = new Sprite(getTexture(TILE_PLAYER));
 			pos = worldToScreen(m.p.pos);
 			pos.x += offset.x - (TILE_WIDTH / 2);
 			pos.y += offset.y;
@@ -161,13 +171,7 @@ class Display {
 
 		batch.begin();
 
-		if((textures.get(UI_TEX_STATUS)) == null) {
-			fname = new String("img/" + String.format("%04d", UI_TEX_STATUS) + ".png");
-			Gdx.app.debug("Diplay:render", "Adding texture " + fname);
-			textures.put(UI_TEX_STATUS, new Texture(Gdx.files.internal(fname)));
-		}
-
-		sprite = new Sprite(textures.get(UI_TEX_STATUS));
+		sprite = new Sprite(getTexture(UI_TEX_STATUS));
 		sprite.setPosition(0, WINDOW_HEIGHT - 16);
 		sprite.draw(batch);
 
@@ -194,13 +198,7 @@ class Display {
 
 		batch.begin();
 
-		if((textures.get(UI_TEX_INTERFACE)) == null) {
-			fname = new String("img/" + String.format("%04d", UI_TEX_INTERFACE) + ".png");
-			Gdx.app.debug("Diplay:render", "Adding texture " + fname);
-			textures.put(UI_TEX_INTERFACE, new Texture(Gdx.files.internal(fname)));
-		}
-
-		sprite = new Sprite(textures.get(UI_TEX_INTERFACE));
+		sprite = new Sprite(getTexture(UI_TEX_INTERFACE));
 		sprite.setPosition(0, 0);
 		sprite.draw(batch);
 

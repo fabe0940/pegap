@@ -47,6 +47,7 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 				Gdx.app.exit();
 			} else {
 				game = new Model(level);
+				input.resetOffset = true;
 			}
 		}
 
