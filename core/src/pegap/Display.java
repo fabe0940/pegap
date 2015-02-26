@@ -98,13 +98,9 @@ class Display {
 
 		batch.enableBlending();
 		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		batch.begin();
-
 		renderModel(m);
 		renderStatus(m);
 		renderInterface(m);
-
-		batch.end();
 	}
 
 	public void dispose() {
@@ -121,6 +117,8 @@ class Display {
 		String fname;
 		Tile t;
 		Vector2 pos;
+
+		batch.begin();
  
 		for(int i = 0; i < map.size(); i++) {
 			t = map.get(i);
@@ -153,12 +151,16 @@ class Display {
 			sprite.setPosition(pos.x, pos.y);
 			sprite.draw(batch);
 		}
+
+		batch.end();
 	}
 
 	private void renderStatus(Model m) {
 		String fname;
 		String msg;
 		Vector2 pos;
+
+		batch.begin();
 
 		if((textures.get(UI_TEX_STATUS)) == null) {
 			fname = new String("img/" + String.format("%04d", UI_TEX_STATUS) + ".png");
@@ -183,11 +185,15 @@ class Display {
 
 		msg = new String("(" + ((int) pos.x) + "," + ((int) pos.y) + ")");
 		font.draw(batch, msg, WINDOW_WIDTH - 50, WINDOW_HEIGHT - 1);
+
+		batch.end();
 	}
 
 	private void renderInterface(Model m) {
 		String fname;
 		String msg;
+
+		batch.begin();
 
 		if((textures.get(UI_TEX_INTERFACE)) == null) {
 			fname = new String("img/" + String.format("%04d", UI_TEX_INTERFACE) + ".png");
@@ -209,5 +215,7 @@ class Display {
 		font.draw(batch, "Move Southwest - B", 155, 40);
 		font.draw(batch, "Move Souteast - N", 155, 25);
 		font.draw(batch, "Exit - Q", 325, 70);
+
+		batch.end();
 	}
 }
