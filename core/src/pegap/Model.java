@@ -51,7 +51,7 @@ class Model {
 
 		for(x = 0; x < width; x++) {
 			for(y = 0; y < height; y++) {
-				if(types[x][y] == -1) continue;
+				if(types[x][y] == Tile.TYPE_NONE) continue;
 				res.put(new Vector2(x, y), new Tile(x, y, types[x][y]));
 			}
 		}
@@ -71,56 +71,49 @@ class Model {
 		map = mapFromFile(l);
 	}
 
-	public void update(Input in) {
+	public int update(Input in) {
+		int res;
 		Vector2 move;
 		Tile dest;
+
+		res = 0;
+		move = new Vector2(-1, -1);
 
 		if(in.move == true) {
 			if(in.moveNorthwest == true) {
 				move = new Vector2(p.pos.x, p.pos.y + 1);
-				if((dest = map.get(move)) != null) {
-					if(dest.type == Tile.TYPE_NORMAL) {
-						turn++;
-						p.pos.y += 1;
-					}
-				}
 				in.moveNorthwest = false;
 			}
 
 			if(in.moveNortheast == true) {
 				move = new Vector2(p.pos.x + 1, p.pos.y);
-				if((dest = map.get(move)) != null) {
-					if(dest.type == Tile.TYPE_NORMAL) {
-						turn++;
-						p.pos.x += 1;
-					}
-				}
 				in.moveNortheast = false;
 			}
 
 			if(in.moveSouthwest == true) {
 				move = new Vector2(p.pos.x - 1, p.pos.y);
-				if((dest = map.get(move)) != null) {
-					if(dest.type == Tile.TYPE_NORMAL) {
-						turn++;
-						p.pos.x -= 1;
-					}
-				}
 				in.moveSouthwest = false;
 			}
 
 			if(in.moveSoutheast == true) {
 				move = new Vector2(p.pos.x, p.pos.y - 1);
-				if((dest = map.get(move)) != null) {
-					if(dest.type == Tile.TYPE_NORMAL) {
-						turn++;
-						p.pos.y -= 1;
-					}
-				}
 				in.moveSoutheast = false;
+			}
+
+			if((dest = map.get(move)) != null) {
+				switch(dest.type) {
+					case Tile.TYPE_EXIT:
+						res = 1;
+					case Tile.TYPE_NORMAL:
+						p.pos = move;
+						turn++;
+						break;
+				}
 			}
 
 			in.move = false;
 		}
+
+		return res;
 	}
 }

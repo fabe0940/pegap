@@ -29,9 +29,9 @@ class Display {
 	private static final int OFFSET_INIT_X = (int) (0.5 * Model.WORLD_SIZE * TILE_WIDTH);
 	private static final int OFFSET_INIT_Y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
 	private static final int SCROLL_RATE = 7;
-	private static final int TILE_PLAYER = 1001;
-	private static final int UI_TEX_INTERFACE = 101;
-	private static final int UI_TEX_STATUS = 102;
+	private static final int TILE_PLAYER = 1000;
+	private static final int UI_TEX_INTERFACE = 100;
+	private static final int UI_TEX_STATUS = 101;
 
 	public static Vector2 worldToScreen(Vector2 pos) {
 		Vector2 res = new Vector2();
