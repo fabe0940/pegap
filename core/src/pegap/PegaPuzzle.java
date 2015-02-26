@@ -106,6 +106,10 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 			input.move = true;
 			input.moveSoutheast = true;
 		}
+		if(character == 'w') {
+			input.move = true;
+			input.moveNone = true;
+		}
 
 		return false;
 	}

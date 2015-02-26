@@ -30,6 +30,7 @@ class Display {
 	private static final int OFFSET_INIT_Y = (int) (0.5 * Model.WORLD_SIZE * TILE_HEIGHT);
 	private static final int SCROLL_RATE = 7;
 	private static final int TILE_PLAYER = 1000;
+	private static final int TILE_ENEMY = 1001;
 	private static final int UI_TEX_BACK = 100;
 	private static final int UI_TEX_INTERFACE = 101;
 	private static final int UI_TEX_STATUS = 102;
@@ -125,7 +126,6 @@ class Display {
 
 	private void renderModel(Model m) {
 		int type;
-		Map<Vector2, Tile> map = m.map;
 		Vector2 pos;
 
 		batch.begin();
@@ -134,7 +134,7 @@ class Display {
 		sprite.setPosition(0, 0);
 		sprite.draw(batch);
  
-		for(Tile t : map.values()) {
+		for(Tile t : m.terrain.values()) {
 			pos = worldToScreen(t.pos);
 			pos.x += offset.x - (TILE_WIDTH / 2);
 			pos.y += offset.y;
@@ -152,14 +152,24 @@ class Display {
 			sprite = new Sprite(getTexture(type));
 			sprite.setPosition(pos.x, pos.y);
 			sprite.draw(batch);
+		}
 
-			sprite = new Sprite(getTexture(TILE_PLAYER));
-			pos = worldToScreen(m.p.pos);
+		for(Enemy e : m.world.values()) {
+			pos = worldToScreen(e.pos);
 			pos.x += offset.x - (TILE_WIDTH / 2);
 			pos.y += offset.y;
+
+			sprite = new Sprite(getTexture(TILE_ENEMY));
 			sprite.setPosition(pos.x, pos.y);
 			sprite.draw(batch);
 		}
+
+		sprite = new Sprite(getTexture(TILE_PLAYER));
+		pos = worldToScreen(m.p.pos);
+		pos.x += offset.x - (TILE_WIDTH / 2);
+		pos.y += offset.y;
+		sprite.setPosition(pos.x, pos.y);
+		sprite.draw(batch);
 
 		batch.end();
 	}
@@ -211,7 +221,8 @@ class Display {
 		font.draw(batch, "Move Northeast - U", 155, 55);
 		font.draw(batch, "Move Southwest - B", 155, 40);
 		font.draw(batch, "Move Souteast - N", 155, 25);
-		font.draw(batch, "Exit - Q", 325, 70);
+		font.draw(batch, "Wait - W", 325, 70);
+		font.draw(batch, "Exit - Q", 325, 55);
 
 		batch.end();
 	}
