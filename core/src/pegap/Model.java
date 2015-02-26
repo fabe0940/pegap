@@ -9,7 +9,9 @@ import pegap.Player;
 import pegap.Enemy;
 
 class Model {
-	public static final int MAX_LEVEL = 6;
+	public static final int LEVEL_WIN = 999;
+	public static final int LEVEL_DEATH = 666;
+	public static final int MAX_LEVEL = 7;
 	public static int WORLD_SIZE = 0;
 
 	public int level;
@@ -113,6 +115,26 @@ class Model {
 		update = false;
 		move = new Vector2(-1, -1);
 
+		if(level == LEVEL_WIN) {
+			try {
+				Thread.sleep(5000);
+			} catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
+
+			Gdx.app.exit();
+		}
+
+		if(level == LEVEL_DEATH) {
+			try {
+				Thread.sleep(1000);
+			} catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
+
+			res = -1;
+		}
+
 		if(in.move == true) {
 			if(in.moveNorthwest == true) {
 				move = new Vector2(p.pos.x, p.pos.y + 1);
@@ -180,8 +202,8 @@ class Model {
 						world.put(e.pos, e);
 
 						if(e.pos.equals(p.pos)) {
-							Gdx.app.log("Model:update", "you lose!");
-							Gdx.app.exit();
+							Gdx.app.debug("Model:update", "death");
+							level = LEVEL_DEATH;
 						}
 
 						break;

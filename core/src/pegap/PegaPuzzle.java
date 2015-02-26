@@ -24,7 +24,7 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.input.setInputProcessor(this);
 
-		level = 1;
+		level = 7;
 
 		game = new Model(level);
 		screen = new Display();
@@ -39,17 +39,23 @@ public class PegaPuzzle implements ApplicationListener, InputProcessor {
 
 	@Override
 	public void render() {
-		screen.update(input, game);
-		if(game.update(input) == 1) {
-			if(++level > Model.MAX_LEVEL) {
-				Gdx.app.log("PegaPuzzle:render", "you win!");
-				Gdx.app.exit();
-			} else {
+		switch(game.update(input)) {
+			case 1:
+				if(++level > Model.MAX_LEVEL) {
+					game.level = Model.LEVEL_WIN;
+				} else {
+					game = new Model(level);
+					input.resetOffset = true;
+				}
+				break;
+			case -1:
 				game = new Model(level);
 				input.resetOffset = true;
-			}
+				break;
+			default:
+				break;
 		}
-
+		screen.update(input, game);
 		screen.render(game);
 	}
 
