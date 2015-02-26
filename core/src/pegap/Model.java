@@ -21,6 +21,7 @@ class Model {
 		int y;
 		int height;
 		int width;
+		int offset;
 		int[][] types;
 		String fname;
 		String fcontents;
@@ -39,11 +40,16 @@ class Model {
 		height = Integer.parseInt(vals[1]);
 		WORLD_SIZE = Math.max(height, width);
 
+		x = (Integer.parseInt(vals[2]) - 1);
+		y = (Integer.parseInt(vals[3]) - 1);
+		p = new Player(x, y);
+
+		offset = 4;
 		types = new int[width][height];
 
-		for(i = 2; i < vals.length; i++) {
-			x = (i - 2) % width;
-			y = (height - 1) - ((i - 2) / width);
+		for(i = offset; i < vals.length; i++) {
+			x = (i - offset) % width;
+			y = (height - 1) - ((i - offset) / width);
 			types[x][y] = Integer.parseInt(vals[i]);
 		}
 
@@ -64,7 +70,6 @@ class Model {
 	}
 
 	Model(int l) {
-		p = new Player();
 		level = l;
 		turn = 0;
 
